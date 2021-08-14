@@ -5,6 +5,11 @@
   border: 2px solid black;
 }
 
+.holidaymessage {
+  font-size: 12px;
+  color: red;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -29,6 +34,10 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.ButtonStyle {
+  width: 175px;
 }
 
 @keyframes App-logo-spin {
