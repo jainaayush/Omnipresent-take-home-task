@@ -1,13 +1,12 @@
 .App {
   text-align: center;
-  margin: 230px;
+  margin: 150px 230px 100px 230px;
   padding: 20px;
   border: 2px solid black;
 }
 
 .holidaymessage {
   font-size: 12px;
-  color: red;
 }
 
 .App-logo {

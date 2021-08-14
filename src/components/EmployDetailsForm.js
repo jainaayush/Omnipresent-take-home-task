@@ -13,7 +13,6 @@ import Button from '@material-ui/core/Button';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import Alert from '@material-ui/lab/Alert';
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
@@ -45,13 +44,12 @@ export default function EmployDetailsForm() {
 	const [lastName, setLastName] = useState("");
 	const [holidayAllowance, setHolidayAllowance] = useState("");
 	const [countries, setCountry] = useState([]);
-	const [selectedDate, setSelectedDate] = useState("");
+	const [selectedDate, setSelectedDate] = useState();
 	const [selectedCountry, setselectedCountry] = useState("Afghanistan");
 	const [maritalStatus, setMaritalStatus] = useState("");
 	const [socialInsurence, setSocialInsurence] = useState("");
 	const [children, setChildren] = useState("");
 	const [workingHours, setWorkingHours] = useState("");
-	let errorMessage = <span></span>
 
 	useEffect(() => {
 		fetch("https://restcountries.eu/rest/v2/all")
@@ -61,17 +59,10 @@ export default function EmployDetailsForm() {
 
   const handleCountryChange = (event) => {
     setselectedCountry(event.target.value);
-  };
-
-	const fieldEmptyMessage = () => {
-		errorMessage = <Alert severity="error">
-			{firstName ? "" : "Name is required"}
-		</Alert>
-	} 
+  }; 
 
 	const formSubmit = (event) => {
 		console.log("form is submited");
-		fieldEmptyMessage();
 		let employData = {};
 		employData = {
 			"first name": firstName,
@@ -111,8 +102,12 @@ export default function EmployDetailsForm() {
 			}}
 			type="number"
 			onChange={(e) => setHolidayAllowance(e.target.value)}
-		/><span className="holidaymessage">{holidayAllowance && message}</span></>
+		/><span className="holidaymessage">({message})</span></>
 	}
+
+	const dateFormatter = str => {
+    return str;
+  };
 
 	const renderMaritalStatus = () => {
 		return <FormControl component="fieldset">
@@ -128,7 +123,7 @@ export default function EmployDetailsForm() {
 		if (selectedCountry === "Spain") {
 			return <>
 				<Grid item xs={12} sm={6}>
-					{renderHolidayAllowance(30, 365, "Minimum holiday allowance is 30 days")}
+					{renderHolidayAllowance(30, 365, "min 30 days")}
         </Grid>
 				<Grid item xs={12} sm={6}>
 					<TextField
@@ -148,7 +143,7 @@ export default function EmployDetailsForm() {
 		} else if (selectedCountry === "Ghana") {
 			return <>
 				<Grid item xs={12} sm={6}>
-					{renderHolidayAllowance(0, 365, "No holiday allowance limit")}
+					{renderHolidayAllowance(0, 365, "No laws on holiday allowance")}
         </Grid>
 				<Grid item xs={12} sm={6}>
 					<TextField
@@ -168,7 +163,7 @@ export default function EmployDetailsForm() {
 		} else if (selectedCountry === "Brazil") {
 			return <>
 				<Grid item xs={12} sm={6}>
-					{renderHolidayAllowance(0, 40, "Maximum holiday allowance is 40 days")}
+					{renderHolidayAllowance(0, 40, "max 40 days")}
         </Grid>
 				<Grid item xs={12} sm={6}>
 					<TextField
@@ -227,6 +222,7 @@ export default function EmployDetailsForm() {
 							value={selectedDate}
 							onChange={setSelectedDate}
 							className={classes.datePickeer}
+							rifmFormatter={dateFormatter}
 						/>
 					</MuiPickersUtilsProvider>
 				</Grid>
@@ -246,9 +242,7 @@ export default function EmployDetailsForm() {
 					</FormControl>
         </Grid>
 				{extraFields()}
-				<Grid item xs={12}>
-					{errorMessage}
-				</Grid>
+				<Grid item xs={12}></Grid>
 				<Grid item xs={12} sm={6}>
 					<Button
 							type="reset"
